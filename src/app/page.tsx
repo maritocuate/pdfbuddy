@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 
 export default function Home() {
   return (
@@ -7,5 +7,5 @@ export default function Home() {
         <p className="text-sm font-semibold text-gray-700">PDF Buddy</p>
       </div>
     </MaxWidthWrapper>
-  );
+  )
 }
