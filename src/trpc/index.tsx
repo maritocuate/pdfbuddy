@@ -68,6 +68,23 @@ export const appRouter = router({
       return file
     }),
 
+  getFile: privateProcedure
+    .input(z.object({ key: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { userId } = ctx
+
+      const file = await db.file.findFirst({
+        where: {
+          key: input.key,
+          userId,
+        },
+      })
+
+      if (!file) throw new TRPCError({ code: 'NOT_FOUND' })
+
+      return file
+    }),
+
   /* 
   createStripeSession: privateProcedure.mutation(async ({ ctx }) => {
     const { userId } = ctx
@@ -179,23 +196,6 @@ export const appRouter = router({
       if (!file) return { status: 'PENDING' as const }
 
       return { status: file.uploadStatus }
-    }),
-
-  getFile: privateProcedure
-    .input(z.object({ key: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const { userId } = ctx
-
-      const file = await db.file.findFirst({
-        where: {
-          key: input.key,
-          userId,
-        },
-      })
-
-      if (!file) throw new TRPCError({ code: 'NOT_FOUND' })
-
-      return file
     }),
  */
 })

@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { Progress } from './ui/progress'
 import { useToast } from './ui/use-toast'
 import { useUploadThing } from '@/lib/uploadthing'
+import { trpc } from '@/app/_trpc/client'
 
 const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const router = useRouter()
@@ -22,9 +23,9 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
   )
 
   const { mutate: startPolling } = trpc.getFile.useMutation({
-    /* onSuccess: file => {
+    onSuccess: file => {
       router.push(`/dashboard/${file.id}`)
-    }, */
+    },
     retry: true,
     retryDelay: 500,
   })
