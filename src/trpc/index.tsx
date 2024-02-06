@@ -2,8 +2,8 @@ import { privateProcedure, publicProcedure, router } from './trpc'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { TRPCError } from '@trpc/server'
 import { db } from '@/db'
-/*import { z } from 'zod'
-import { INFINITE_QUERY_LIMIT } from '@/config/infinite-query'
+import { z } from 'zod'
+/*import { INFINITE_QUERY_LIMIT } from '@/config/infinite-query'
 import { absoluteUrl } from '@/lib/utils'
 import { getUserSubscriptionPlan, stripe } from '@/lib/stripe'
 import { PLANS } from '@/config/stripe' */
@@ -44,6 +44,29 @@ export const appRouter = router({
       },
     })
   }),
+
+  deleteFile: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { userId } = ctx
+
+      const file = await db.file.findFirst({
+        where: {
+          id: input.id,
+          userId,
+        },
+      })
+
+      if (!file) throw new TRPCError({ code: 'NOT_FOUND' })
+
+      await db.file.delete({
+        where: {
+          id: input.id,
+        },
+      })
+
+      return file
+    }),
 
   /* 
   createStripeSession: privateProcedure.mutation(async ({ ctx }) => {
@@ -174,29 +197,7 @@ export const appRouter = router({
 
       return file
     }),
-
-  deleteFile: privateProcedure
-    .input(z.object({ id: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const { userId } = ctx
-
-      const file = await db.file.findFirst({
-        where: {
-          id: input.id,
-          userId,
-        },
-      })
-
-      if (!file) throw new TRPCError({ code: 'NOT_FOUND' })
-
-      await db.file.delete({
-        where: {
-          id: input.id,
-        },
-      })
-
-      return file
-    }), */
+ */
 })
 
 export type AppRouter = typeof appRouter
