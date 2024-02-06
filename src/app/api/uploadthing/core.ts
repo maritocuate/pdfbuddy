@@ -50,7 +50,7 @@ const onUploadComplete = async ({
       `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`
     )
 
-    const blob = await response.blob()
+    /*const blob = await response.blob()
 
     const loader = new PDFLoader(blob)
 
@@ -58,7 +58,7 @@ const onUploadComplete = async ({
 
     const pagesAmt = pageLevelDocs.length
 
-    /* const { subscriptionPlan } = metadata
+     const { subscriptionPlan } = metadata
     const { isSubscribed } = subscriptionPlan */
 
     /* const isProExceeded =
