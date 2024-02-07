@@ -6,7 +6,7 @@ import { ChevronLeft, Loader2, XCircle } from 'lucide-react'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import ChatInput from './ChatInput'
-//import { ChatContextProvider } from './ChatContext'
+import { ChatContextProvider } from './ChatContext'
 //import { PLANS } from '@/config/stripe'
 
 interface ChatWrapperProps {
@@ -20,8 +20,10 @@ const ChatWrapper = ({ fileId, isSubscribed }: ChatWrapperProps) => {
       fileId,
     },
     {
-      refetchInterval: (data: any) =>
-        data?.status === 'SUCCESS' || data?.status === 'FAILED' ? false : 500,
+      refetchInterval: data => {
+        const status = data.state.data?.status
+        return status === 'SUCCESS' || status === 'FAILED' ? false : 5000
+      },
     }
   )
 
@@ -86,13 +88,15 @@ const ChatWrapper = ({ fileId, isSubscribed }: ChatWrapperProps) => {
     )
 
   return (
-    <div className="relative min-h-full bg-zinc-50 flex divide-y divide-zinc-200 flex-col justify-between gap-2">
-      <div className="flex-1 justify-between flex flex-col mb-28">
-        <Messages />
-      </div>
+    <ChatContextProvider fileId={fileId}>
+      <div className="relative min-h-full bg-zinc-50 flex divide-y divide-zinc-200 flex-col justify-between gap-2">
+        <div className="flex-1 justify-between flex flex-col mb-28">
+          <Messages />
+        </div>
 
-      <ChatInput />
-    </div>
+        <ChatInput />
+      </div>
+    </ChatContextProvider>
   )
 }
 
