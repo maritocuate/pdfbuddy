@@ -20,6 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useResizeDetector } from 'react-resize-detector'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
@@ -55,7 +56,8 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
     },
   })
 
-  const width = 800
+  const { width, ref } = useResizeDetector()
+  //const width = 800
 
   const handlePageSubmit = ({ page }: TCustomPageValidator) => {
     setCurrPage(Number(page))
@@ -145,8 +147,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
         </div>
       </div>
 
-      <div className="flex-1 w-full max-h-screen">
-        SimpleBar
+      <div className="flex-1 w-full max-h-screen" ref={ref}>
         <Document
           loading={
             <div className="flex justify-center">
