@@ -21,6 +21,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useResizeDetector } from 'react-resize-detector'
+import { zodResolver } from '@hookform/resolvers/zod'
+import SimpleBar from 'simplebar-react'
+import PdfFullscreen from './PdfFullscreen'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
@@ -54,10 +57,10 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
     defaultValues: {
       page: '1',
     },
+    resolver: zodResolver(CustomPageValidator),
   })
 
   const { width, ref } = useResizeDetector()
-  //const width = 800
 
   const handlePageSubmit = ({ page }: TCustomPageValidator) => {
     setCurrPage(Number(page))
@@ -144,52 +147,58 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
           >
             <RotateCw className="h-4 w-4" />
           </Button>
+
+          <PdfFullscreen fileUrl={url} />
         </div>
       </div>
 
-      <div className="flex-1 w-full max-h-screen" ref={ref}>
-        <Document
-          loading={
-            <div className="flex justify-center">
-              <Loader2 className="my-24 h-6 w-6 animate-spin" />
-            </div>
-          }
-          onLoadError={() => {
-            toast({
-              title: 'Error loading PDF',
-              description: 'Please try again later',
-              variant: 'destructive',
-            })
-          }}
-          onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-          file={url}
-          className="max-h-full"
-        >
-          {isLoading && renderedScale ? (
-            <Page
-              width={width ? width : 1}
-              pageNumber={currPage}
-              scale={scale}
-              rotate={rotation}
-              key={'@' + renderedScale}
-            />
-          ) : null}
+      <div className="flex-1 w-full max-h-screen">
+        <SimpleBar autoHide={false} className="max-h-[calc(100vh-10rem)]">
+          <div ref={ref}>
+            <Document
+              loading={
+                <div className="flex justify-center">
+                  <Loader2 className="my-24 h-6 w-6 animate-spin" />
+                </div>
+              }
+              onLoadError={() => {
+                toast({
+                  title: 'Error loading PDF',
+                  description: 'Please try again later',
+                  variant: 'destructive',
+                })
+              }}
+              onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+              file={url}
+              className="max-h-full"
+            >
+              {isLoading && renderedScale ? (
+                <Page
+                  width={width ? width : 1}
+                  pageNumber={currPage}
+                  scale={scale}
+                  rotate={rotation}
+                  key={'@' + renderedScale}
+                />
+              ) : null}
 
-          <Page
-            className={cn(isLoading ? 'hidden' : '')}
-            width={width ? width : 1}
-            pageNumber={currPage}
-            scale={scale}
-            rotate={rotation}
-            key={'@' + scale}
-            loading={
-              <div className="flex justify-center">
-                <Loader2 className="my-24 h-6 w-6 animate-spin" />
-              </div>
-            }
-            onRenderSuccess={() => setRenderedScale(scale)}
-          />
-        </Document>
+              <Page
+                className={cn(isLoading ? 'hidden' : '')}
+                width={width ? width : 1}
+                pageNumber={currPage}
+                scale={scale}
+                rotate={rotation}
+                key={'@' + scale}
+                loading={
+                  <div className="flex justify-center">
+                    <Loader2 className="my-24 h-6 w-6 animate-spin" />
+                  </div>
+                }
+                onRenderSuccess={() => setRenderedScale(scale)}
+              />
+            </Document>
+          </div>
+        </SimpleBar>
       </div>
     </div>
   )
