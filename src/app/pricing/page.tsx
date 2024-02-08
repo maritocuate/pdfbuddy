@@ -1,4 +1,5 @@
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
+import UpgradeButton from '@/components/Upgradebutton'
 import { buttonVariants } from '@/components/ui/button'
 import {
   Tooltip,
@@ -183,7 +184,7 @@ const Page = async () => {
                         <ArrowRight className="h-5 w-5 ml-1.5" />
                       </Link>
                     ) : user ? (
-                      <div>upgrade</div>
+                      <UpgradeButton />
                     ) : (
                       <Link
                         href="/sign-in"
