@@ -5,7 +5,7 @@ export const getPineconeClient = async () => {
     apiKey: process.env.PINECONE_API_KEY!,
   })
 
-  await client.createIndex({
+  /* await client.createIndex({
     name: 'quickstart',
     dimension: 8,
     metric: 'euclidean',
@@ -15,7 +15,7 @@ export const getPineconeClient = async () => {
         region: 'us-west-2',
       },
     },
-  })
+  }) */
 
   return client
 }
