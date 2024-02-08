@@ -12,6 +12,7 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { fileid } = params
+  console.log(fileid)
 
   const { getUser } = getKindeServerSession()
   const user = await getUser()
@@ -31,7 +32,7 @@ export default async function Page({ params }: PageProps) {
       <div className="mx-auto w-full max-w-8xl grow lg:flex xl:px-2">
         <div className="flex-1 xl:flex">
           <div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
-            <PdfRenderer url="https://utfs.io/f/c42e7e83-38fe-43ea-abf7-cbf6868ef477-uhu4vd.pdf" />
+            <PdfRenderer url={file.url} />
           </div>
         </div>
 
