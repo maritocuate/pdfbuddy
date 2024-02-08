@@ -12,7 +12,6 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { fileid } = params
-  console.log(fileid)
 
   const { getUser } = getKindeServerSession()
   const user = await getUser()
