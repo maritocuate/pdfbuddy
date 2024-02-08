@@ -3,6 +3,7 @@ import MaxWidthWrapper from './MaxWidthWrapper'
 import { buttonVariants } from './ui/button'
 import { LoginLink, RegisterLink } from '@kinde-oss/kinde-auth-nextjs/server'
 import { ArrowRight } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const Navbar = () => {
   return (
@@ -13,7 +14,7 @@ const Navbar = () => {
             <span>PDF Buddy</span>
           </Link>
 
-          <div className="hidden items-center space-x-4 sm:flex">
+          <div className="items-center space-x-4 sm:flex">
             <>
               <Link
                 href="/pricing"
@@ -33,9 +34,12 @@ const Navbar = () => {
                 Sign in
               </LoginLink>
               <RegisterLink
-                className={buttonVariants({
-                  size: 'sm',
-                })}
+                className={cn(
+                  buttonVariants({
+                    size: 'sm',
+                  }),
+                  'hidden sm:flex'
+                )}
               >
                 Get started <ArrowRight className="ml-1.5 h-5 w-5" />
               </RegisterLink>
